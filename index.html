@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine's Day Proposal</title>
+  
+  <!-- Google Fonts for Romantic Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #ffdde1;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    body:before {
+      content: '';
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      background-image: url(https://divi.space/wp-content/uploads/2019/02/hearts.png);
+      animation: falling-hearts 8s linear infinite;
+    }
+
+    @keyframes falling-hearts {
+      0% {background-position: 0% 30%;}
+    }
+
+    h2 {
+      font-size: 2em;
+      color: #D63384;
+      margin-top: 20px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .yes_button, .no_button {
+      cursor: pointer;
+      min-width: 200px;
+      height: 60px;
+      border: none;
+      border-radius: 25px;
+      color: white;
+      font-size: 1.5em;
+      font-weight: bold;
+      text-align: center;
+      line-height: 60px;
+      padding: 0 20px;
+      white-space: nowrap;
+      transition: transform 0.3s ease, font-size 0.3s ease; /* Adding transition for transform and font-size */
+    }
+
+    .yes_button {
+      background: #ff4081;
+      animation: pulse 0.6s infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.1); }
+    }
+
+    .no_button {
+      background-color: #330d14;
+      position: relative;
+    }
+
+    .heart-bg {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: #fbdadb;
+      opacity: 0.2;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom:0;
+      right:0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .modal-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 20px;
+    }
+    
+    .modal .heart-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .modal .heart-svg {
+      width: 50vw;
+      height: auto;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .overlay-text {
+      position: absolute;
+      color: #D50000;
+      width: 40vw;
+      font-size: 2rem;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+      z-index: 2;
+      font-family: 'Pacifico', cursive;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="heart-bg"></div>
+  <div class="container">
+    <h2>Will you be my Valentine? 💖</h2>
+    <img src="https://media.tenor.com/ZJ0t7DP3FjMAAAAj/milk-and-mocha-gif-mocha-makeing-love.gif">
+    <div class="buttons">
+      <div class="yes_button" id="yes-button">Yes</div>
+      <div class="no_button" id="no-button">No</div>
+    </div>
+  </div>
+
+  <div id="heartModal" class="modal">
+    <div class="modal-content">
+      <div class="heart-container">
+        <object type="image/svg+xml" data="heart.svg" class="heart-svg"></object>
+        <div class="overlay-text">
+          <p>YAY! 💖</p>
+          <p>I LOVE YOU SOOOOO MUCH! 😘</p>
+          <img src="https://media.tenor.com/dVMwRYiAGsAAAAAj/kiss.gif" loop style="clip-path: inset(10px 0 10px 0); width: 15vw; height: auto; background: white;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const noButton = document.getElementById('no-button');
+    const yesButton = document.getElementById('yes-button');
+    const messages = [
+      "Ope, you almost clicked no! 😅",
+      "Take a second to reconsider! 🤔",
+      "Are you sure? 😢",
+      "Too bad, you're stuck with me now! 😘",
+      "Just say yes already! 🙏",
+      "I'm begging you 😫",
+      "PLEEEEAAAASSSEEE!!!! 🥺",
+      "WHHHYYYY?!?!?!?!?!?! 😭",
+      "Okay, this button is going away now!"
+    ];
+    let index = 0;
+    const maxScale = 1.8;  // Max scale value for Yes button
+    const scaleInterval = (maxScale - 1) / messages.length;  // Interval step for scaling
+
+    noButton.addEventListener("mouseover", function() {
+      if (index < messages.length) {
+        noButton.innerText = messages[index];
+        index++;
+
+        // Shrink No button
+        noButton.style.transform = 'scale(0.8)';
+        noButton.style.fontSize = '1.2em';  // Smaller font size for the No button
+        noButton.style.width = 'auto';  // Let it shrink with text
+        noButton.style.position = 'absolute';
+        noButton.style.left = `${Math.floor(Math.random() * 70)}%`;
+        noButton.style.top = `${Math.floor(Math.random() * 70)}%`;
+
+        // Increase Yes button size step by step, with more width increase and less height increase
+        const newWidth = 1.5 + .75 * index;  // Increase width more
+        const newHeight = 1.5 + .3 * index;  // Increase height less
+        yesButton.style.width = `${newWidth}em`;
+        yesButton.style.height = `${newHeight}em`;
+        yesButton.style.fontSize = `${newWidth}em`;  // Increase font size with the width
+
+        // Center text vertically within the growing button
+        yesButton.style.lineHeight = `${newHeight}em`;
+      } else {
+        noButton.style.display = "none";
+      }
+    });
+
+    yesButton.addEventListener('click', function() {
+      heartModal.style.display = 'flex';
+    });
+
+    window.onclick = function(event) {
+      if (event.target === heartModal) {
+        heartModal.style.display = 'none';
+      }
+    };
+  </script>
+</body>
+</html>
